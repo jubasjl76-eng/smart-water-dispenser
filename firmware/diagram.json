@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "author": "Smart Pet IoT",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "esp32-devkit-v1",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "ultrasonic-sensor",
+      "id": "water-level",
+      "top": 90,
+      "left": 0,
+      "attrs": {}
+    },
+    {
+      "type": "relay",
+      "id": "pump",
+      "top": 90,
+      "left": 150,
+      "attrs": {}
+    },
+    {
+      "type": "led",
+      "id": "led",
+      "top": 180,
+      "left": 0,
+      "attrs": {
+        "color": "blue"
+      }
+    },
+    {
+      "type": "resistor",
+      "id": "r1",
+      "top": 180,
+      "left": 120,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "potentiometer",
+      "id": "tds",
+      "top": 270,
+      "left": 0,
+      "attrs": {
+        "resistance": "10000"
+      }
+    },
+    {
+      "type": "potentiometer",
+      "id": "temp",
+      "top": 270,
+      "left": 120,
+      "attrs": {
+        "resistance": "10000"
+      }
+    },
+    {
+      "type": "pushbutton",
+      "id": "button",
+      "top": 360,
+      "left": 0,
+      "attrs": {
+        "bounce": "0"
+      }
+    }
+  ],
+  "connections": [
+    ["esp:5", "water-level:TRIG", ""],
+    ["esp:18", "water-level:ECHO", ""],
+    ["esp:4", "pump:IN", ""],
+    ["pump:VCC", "esp:3V3", ""],
+    ["pump:GND", "esp:GND", ""],
+    ["esp:2", "led:VN", ""],
+    ["esp:GND", "led:VSS", ""],
+    ["r1:1", "led:VSS", ""],
+    ["r1:2", "esp:GND", ""],
+    ["tds:O", "esp:34", ""],
+    ["tds:VCC", "esp:3V3", ""],
+    ["tds:GND", "esp:GND", ""],
+    ["temp:O", "esp:35", ""],
+    ["temp:VCC", "esp:3V3", ""],
+    ["temp:GND", "esp:GND", ""],
+    ["button:1", "esp:3V3", ""],
+    ["button:2", "esp:0", ""]
+  ],
+  "dependencies": {}
+}

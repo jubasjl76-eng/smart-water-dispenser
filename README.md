@@ -87,6 +87,54 @@ Open in OpenSCAD to view and export STL files.
 6. Register device
 7. Set schedule
 
+## Wokwi Simulation
+
+This firmware can be simulated in Wokwi without physical hardware.
+
+### Simulated Hardware Components
+
+- **ESP32 DevKit V1** - Main microcontroller
+- **Ultrasonic Sensor** - Water level monitoring
+- **Relay** - Pump control
+- **LED** - Status indicator (blue)
+- **Potentiometer (TDS)** - Water quality simulation
+- **Potentiometer (Temp)** - Temperature simulation
+- **Push Button** - Manual dispense trigger
+
+### Running the Simulation
+
+1. Open [Wokwi](https://wokwi.com)
+2. Create a new ESP32 project
+3. Upload the `firmware/diagram.json` file
+4. Build the firmware:
+   ```bash
+   # Using PlatformIO (if available)
+   pio run
+   ```
+5. Upload the compiled firmware to Wokwi
+6. The simulation will start automatically
+
+### Pin Connections
+
+| ESP32 Pin | Component |
+|-----------|-----------|
+| 4 | Pump Relay |
+| 5 | Ultrasonic Trig |
+| 18 | Ultrasonic Echo |
+| 34 | TDS Sensor (analog) |
+| 35 | Temperature (analog) |
+| 2 | Status LED |
+| 0 | Push Button |
+
+### Testing
+
+The simulation will show:
+- Pump relay activation
+- Ultrasonic sensor measuring water level
+- TDS value simulation
+- Temperature value simulation
+- LED status indication
+
 ## License
 
 MIT
