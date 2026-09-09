@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "author": "Smart Pet",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-hc-sr04", "id": "level", "top": -100, "left": 130, "attrs": {} },
+    { "type": "wokwi-potentiometer", "id": "tds", "top": 130, "left": -80, "attrs": { "value": "1500" } },
+    { "type": "wokwi-ntc-temperature-sensor", "id": "ntc", "top": 130, "left": 120, "attrs": {} },
+    { "type": "wokwi-relay-module", "id": "pump", "top": -30, "left": -140, "attrs": {} },
+    { "type": "wokwi-led", "id": "led", "top": 40, "left": 200, "attrs": { "color": "green" } },
+    { "type": "wokwi-resistor", "id": "r1", "top": 90, "left": 200, "attrs": { "value": "220" } }
+  ],
+  "connections": [
+    [ "esp:5", "level:TRIG", "green", [] ],
+    [ "esp:18", "level:ECHO", "green", [] ],
+    [ "level:VCC", "esp:5V", "red", [] ],
+    [ "level:GND", "esp:GND.1", "black", [] ],
+
+    [ "esp:34", "tds:SIG", "orange", [] ],
+    [ "tds:VCC", "esp:3V3", "red", [] ],
+    [ "tds:GND", "esp:GND.2", "black", [] ],
+
+    [ "esp:35", "ntc:OUT", "orange", [] ],
+    [ "ntc:VCC", "esp:3V3", "red", [] ],
+    [ "ntc:GND", "esp:GND.2", "black", [] ],
+
+    [ "esp:4", "pump:IN", "blue", [] ],
+    [ "pump:VCC", "esp:5V", "red", [] ],
+    [ "pump:GND", "esp:GND.1", "black", [] ],
+
+    [ "esp:2", "r1:1", "green", [] ],
+    [ "r1:2", "led:A", "green", [] ],
+    [ "led:C", "esp:GND.3", "black", [] ]
+  ],
+  "dependencies": {}
+}

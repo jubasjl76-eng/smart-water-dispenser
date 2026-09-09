@@ -43,33 +43,25 @@ A Wi-Fi enabled smart pet water dispenser with ESP32, water quality monitoring, 
 
 ### Firmware
 
-Location: `firmware/smart-water-dispenser.cpp`
-
-### Backend API
-
-Location: `backend/`
+Location: `firmware/main.cpp` — built on
+[smart-pet-device-sdk](https://github.com/jubasjl76-eng/smart-pet-device-sdk).
+The SDK owns Wi-Fi + SoftAP provisioning, NTP, MQTT
+(`kennel/{kennelId}/water/{deviceId}/*`), LWT, OTA, command/ack, schedule
+caching and the offline journal; `main.cpp` is just the dispenser. See
+`firmware/README.md` for build / flash / calibration.
 
 ```bash
-cd backend
-npm install
-npm run dev
+pio run -d firmware
 ```
 
-API runs on http://localhost:3003
+The pre-SDK single-file firmware is kept as
+`firmware/smart-water-dispenser.legacy.cpp`.
 
-## API Endpoints
+### Backend
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /health | Health check |
-| GET | /api/devices | List all devices |
-| POST | /api/devices | Register new device |
-| POST | /api/status | Update device status |
-| POST | /api/dispense | Trigger water dispense |
-| GET | /api/schedule | Get schedules |
-| POST | /api/schedule | Create schedule |
-
-**Required Header:** `X-API-Key: your-api-key-here`
+There is no per-device backend any more. The dispenser talks MQTT to
+**[smart-pet-backend](https://github.com/jubasjl76-eng/smart-pet-backend)**.
+The legacy `backend/` folder in this repo is dead and will be removed.
 
 ## 3D Design
 
@@ -82,10 +74,9 @@ Open in OpenSCAD to view and export STL files.
 1. Order components (~€38)
 2. 3D print enclosure
 3. Assemble hardware
-4. Flash firmware
-5. Start backend API
-6. Register device
-7. Set schedule
+4. `pio run -d firmware` and flash
+5. Join the `smartpet-<mac>` AP on first boot and provision
+6. Claim the device from the Smart Pet console; set a schedule
 
 ## License
 
