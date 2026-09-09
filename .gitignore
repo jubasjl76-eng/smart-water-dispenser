@@ -1,1 +1,3 @@
 graphify-out/
+firmware/.pio/
+firmware/provision.local.h
