@@ -19,8 +19,6 @@
 #include <Preferences.h>
 #include <time.h>
 
-void logEvent(const String& message); // defined below; used throughout
-
 // ============== CONFIGURATION ==============
 const char* WIFI_SSID = "YOUR_WIFI_SSID";
 const char* WIFI_PASSWORD = "YOUR_WIFI_PASSWORD";
@@ -44,6 +42,28 @@ const int LOW_WATER_THRESHOLD = 20; // percentage
 // TDS thresholds (ppm)
 const int TDS_GOOD = 300;
 const int TDS_ACCEPTABLE = 600;
+
+// Forward declarations: this file is a plain .cpp (not a .ino), so it
+// doesn't get PlatformIO's automatic ino prototype generation, and several
+// functions here call each other before their own definition appears.
+void initPump();
+bool pumpWater(int durationMs = PUMP_ON_TIME_MS);
+void stopPump();
+float measureWaterLevel();
+int getWaterLevel();
+bool isWaterLow();
+bool isPumpSafe();
+int readTDS();
+int getWaterQuality();
+float readTemperature();
+void connectWiFi();
+void sendStatusToApi();
+void fetchScheduleFromApi();
+void handleApiCommand(const String& command);
+void checkSchedule();
+void logEvent(const String& message);
+String getLogJson();
+void updateLED();
 
 // ============== GLOBALS ==============
 Preferences preferences;
@@ -81,7 +101,7 @@ void initPump() {
  * @param durationMs Duration in milliseconds
  * @return true if successful
  */
-bool pumpWater(int durationMs = PUMP_ON_TIME_MS) {
+bool pumpWater(int durationMs) {
   if (!isPumpSafe()) {
     logEvent("ERROR: Pump not safe to operate");
     return false;
