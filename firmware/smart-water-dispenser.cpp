@@ -17,6 +17,9 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 #include <Preferences.h>
+#include <time.h>
+
+void logEvent(const String& message); // defined below; used throughout
 
 // ============== CONFIGURATION ==============
 const char* WIFI_SSID = "YOUR_WIFI_SSID";
@@ -199,6 +202,7 @@ void connectWiFi() {
   
   if (WiFi.status() == WL_CONNECTED) {
     isConnected = true;
+    configTime(0, 0, "pool.ntp.org"); // UTC; schedule hour/minute below read this
     logEvent("WiFi connected");
   } else {
     isConnected = false;
@@ -293,17 +297,20 @@ void handleApiCommand(const String& command) {
 // ============== SCHEDULING ==============
 void checkSchedule() {
   if (scheduleCount == 0) return;
-  
+
+  struct tm timeinfo;
+  if (!getLocalTime(&timeinfo, 0)) return; // NTP not synced yet
+
   static int lastMinute = -1;
-  int currentMinute = minute();
-  
+  int currentMinute = timeinfo.tm_min;
+
   if (currentMinute != lastMinute) {
     lastMinute = currentMinute;
-    
+
     for (int i = 0; i < scheduleCount; i++) {
-      if (schedules[i].enabled && 
-          schedules[i].hour == hour() && 
-          schedules[i].minute == minute()) {
+      if (schedules[i].enabled &&
+          schedules[i].hour == timeinfo.tm_hour &&
+          schedules[i].minute == currentMinute) {
         logEvent("Scheduled water dispense triggered");
         pumpWater();
       }
